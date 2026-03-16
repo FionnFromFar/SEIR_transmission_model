@@ -14,15 +14,16 @@ def seir(y, t, beta, sigma, gamma): #defining the SEIR equations in a function
     return [dsdt, dedt, didt, drdt] 
 
 #setting up model parameters (from assesment brief)
-beta = 1.0 #infection rate
+beta = 1.75 #infection rate
 sigma = 1.0 #incubation rate
-gamma = 0.1 #recovery rate
+gamma = 0.75 #recovery rate
 
 #setting up basic initial conditions for first run (as percentage of population)
 s0 = 0.99 #initial susceptible
 e0 = 0.01 #initial exposed
 i0 = 0.0 #initial infected
 r0 = 0.0 # intial recovered
+R0 = (beta/gamma) * s0 #Initial growth rate
 
 #setting up initial condisitons in the list y for the function
 y0 = [s0, e0, i0, r0]
@@ -48,7 +49,8 @@ plt.plot(t, r, color="skyblue", alpha=0.7, linewidth=2, label="Recovered")
 
 plt.xlabel("Time (days)")
 plt.ylabel("Fraction of population")
-plt.title("SEIR model with beta=1.0, sigma=1.0, gamma=0.1")
+plt.title(f"SEIR model with beta=1.75, sigma=1.0, gamma=0.75 (R0={R0:.2f})")
 plt.legend()
-plt.savefig("seir_plot_initial(verified).png", dpi=300) #having to save the graph as an image because im running in a linux terminal
-print("Graph saved as 'seir_plot_initial(verified).png'")
+plt.savefig("graphs/seir_R0_3_5.png", dpi=300) #having to save the graph as an image because im running in a linux terminal
+print(f"The initial growth rate of this simulation was: {R0:.2f}")
+print("Graph saved as 'seir_R0_3_5.png' in graphs folder")
