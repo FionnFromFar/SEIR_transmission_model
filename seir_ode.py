@@ -1,6 +1,7 @@
 #Importing the nececary libraries
 import numpy as np
 from scipy.integrate import odeint
+import matplotlib.pyplot as plt
 
 def seir(y, t, beta, sigma, gamma): #defining the SEIR equations in a function
     s, e, i, r = y #get the SEIR data from this list y
@@ -32,8 +33,22 @@ t = np.linspace(0, 100, 100)
 #using odeint to solve the odes over the time array above
 ret = odeint(seir, y0, t, args=(beta, sigma, gamma))
 
-#extracting the results to ret
+#extracting the results to ret (and transposing)
 s, e, i, r = ret.T
 
-print("ret shape:\n", ret.shape)
-print("Top 5 rows:\n", ret[:5])
+
+
+#Making the plot
+plt.figure(figsize=(10,8))
+
+plt.plot(t, s, color="green", alpha=0.7, linewidth=2, label="Susceptible")
+plt.plot(t, e, color="orange", alpha=0.7, linewidth=2, label="Exposed")
+plt.plot(t, i, color="red", alpha=0.7, linewidth=2, label="Infected")
+plt.plot(t, r, color="skyblue", alpha=0.7, linewidth=2, label="Recovered")
+
+plt.xlabel("Time (days)")
+plt.ylabel("Fraction of population")
+plt.title("SEIR model with beta=1.0, sigma=1.0, gamma=0.1")
+plt.legend()
+plt.savefig("seir_plot_initial.png", dpi=300) #having to save the graph as an image because im running in a linux terminal
+print("Graph saved as 'seir_plot_initial.png'")
