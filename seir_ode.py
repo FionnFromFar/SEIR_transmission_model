@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def seir(y, t, beta, sigma, gamma): #defining the SEIR equations in a function
     s, e, i, r = y #get the SEIR data from this list y
 
-    dsdt = -beta * i * t # equation for susceptible [7]
+    dsdt = -beta * i * s # equation for susceptible [7]
     dedt = (beta * i * s) - (sigma * e) # equation for exposed [8]
     didt = (sigma * e) - (gamma * i) # equation for infected [9]
     drdt = gamma * i #equation for recovered
@@ -50,5 +50,5 @@ plt.xlabel("Time (days)")
 plt.ylabel("Fraction of population")
 plt.title("SEIR model with beta=1.0, sigma=1.0, gamma=0.1")
 plt.legend()
-plt.savefig("seir_plot_initial.png", dpi=300) #having to save the graph as an image because im running in a linux terminal
-print("Graph saved as 'seir_plot_initial.png'")
+plt.savefig("seir_plot_initial(verified).png", dpi=300) #having to save the graph as an image because im running in a linux terminal
+print("Graph saved as 'seir_plot_initial(verified).png'")
