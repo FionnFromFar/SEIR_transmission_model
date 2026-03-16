@@ -26,5 +26,14 @@ r0 = 0.0 # intial recovered
 #setting up initial condisitons in the list y for the function
 y0 = [s0, e0, i0, r0]
 
-#creating a list to represent 100 days as per instructions
+#creating a list to represent 100 days as per instructions to be fed into odeint
 t = np.linspace(0, 100, 100)
+
+#using odeint to solve the odes over the time array above
+ret = odeint(seir, y0, t, args=(beta, sigma, gamma))
+
+#extracting the results to ret
+s, e, i, r = ret.T
+
+print("ret shape:\n", ret.shape)
+print("Top 5 rows:\n", ret[:5])
