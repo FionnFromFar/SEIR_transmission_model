@@ -1,0 +1,19 @@
+# -- Ignore from python:
+__pycache--/
+# ignoring all compiled py files
+*.pyc 
+
+# -- Ignore from C++
+#Ignoring object files
+*.o
+#Ignoring executable files
+*.exe
+#Ignoring windows debug files
+*.pdb
+
+# -- System Ignores
+#Ignore mac hidden files
+.DS_Store
+#Ignore possible temporary files
+*.swp
+
