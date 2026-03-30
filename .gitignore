@@ -17,3 +17,5 @@ __pycache--/
 #Ignore possible temporary files
 *.swp
 
+#Ignoring pdf files like the instructions
+*.pdf
