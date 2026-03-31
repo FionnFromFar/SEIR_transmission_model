@@ -10,6 +10,7 @@ private:
     double x, y; //current positions in the box
     double vx, vy; //current velocities
     State status; //current health status (S, E, I or R)
+    double timeInState; //tracks the time spent in any state
 
 public:
     //Constructor function to run and intialise a new agent with position, velocity and state
@@ -34,6 +35,10 @@ public:
     //getting the state so that it can be changed if neccecary after infected/susceptible interatction
     State getState() const {return status; }
     void setState(State newState) { status = newState; }
+
+    void updateTime(double dt) {timeInState += dt; }
+    void resetTime() {timeInState = 0.0; }
+    double getTime() const {return timeInState; }
 
 };
 

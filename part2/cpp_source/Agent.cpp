@@ -3,7 +3,7 @@
 
 //intialising the agents properties directly with an initialisation list
 Agent::Agent(double x0, double y0, double vx0, double vy0, State s0)
-    : x(x0), y(y0), vx(vx0), vy(vy0), status(s0) {}
+    : x(x0), y(y0), vx(vx0), vy(vy0), status(s0), timeInState(0.0) {}
 
 //The 'move' function the main propagation step of the simulation
 void Agent::move(double dt, double L) {

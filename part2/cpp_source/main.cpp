@@ -5,7 +5,7 @@
 
 int main() {
     //setting up the simulation constants
-    const int N = 100; //total number of people
+    const int N = 100; //total number of people/agents
     const double L = 100.0; //size of the area
     const double dt = 0.1; //time step
 
@@ -52,6 +52,21 @@ int main() {
             //calling the propagation step defined in the header file
             //which updates x and y and behaves well at the boundaries
             a.move(dt, L);
+            a.updateTime(dt); //adds dt to internal clock of each agent
+
+            //adding the transmission from exposed to infected
+            if (a.getStatus() == State::Exposed && a.getTime() > 5.0) {
+                a.setStatus(State::Infected); //change to infected after 5 ticks
+                a.resetTime(); //reset time in state (because state has changed)
+                std::cout << "An agent has become Infectious!!!" << std::endl;
+            }
+
+            //adding the transmission from infected to recovered
+            if (a.getStatus() == State::Infected && a.getTime() > 15.0) {
+                a.setStatus(State::Recovered); //change to recovered after 15 ticks
+                a.resetTime();
+                std::cout << "An agent has recovered!!!" << std::endl;
+            }
         
         //interaction step
         double infection_radius = 2.0; //distance required for disease to spead
