@@ -1,4 +1,5 @@
 #include "Agent.hpp" //taking the definition of Agent class from the header file
+#include <cmath> //maths module neeeded for distance caluculations
 
 //intialising the agents properties directly with an initialisation list
 Agent::Agent(double x0, double y0, double vx0, double vy0, State s0)
@@ -29,4 +30,11 @@ void Agent::move(double dt, double L) {
         if (y < 0) y = 0;
         if (y > 0) y = L;
     }
+}
+
+//The'distance between' function
+double Agent::distanceTo(const Agent& other) const {
+    double dx = x - other.x; //dx is difference in x cords
+    double dy = y - other.y; //dy is difference in y cords
+    return std::sqrt(dx*dx + dy*dy);
 }

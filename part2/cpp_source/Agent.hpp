@@ -15,6 +15,9 @@ public:
     //Constructor function to run and intialise a new agent with position, velocity and state
     Agent(double x0, double y0, double vx0, double vy0, State s0);
 
+    //function to calculate distance between agents
+    double distanceTo(const Agent& other) const;
+
     //getter functions to allow reading of the data without changing it
     double getX() const { return x; }
     double getY() const { return y; } //return both the x and y coords
@@ -27,6 +30,10 @@ public:
     void move (double dt, double L);
     //dt is the time step
     //L is the length and width of the box
+
+    //getting the state so that it can be changed if neccecary after infected/susceptible interatction
+    State getState() const {return status; }
+    void setState(State newState) { status = newState; }
 
 };
 
