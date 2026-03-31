@@ -1,3 +1,4 @@
+//LATTICE BRANCH
 #include <iostream>
 #include <vector>
 #include <random> //from week 20
