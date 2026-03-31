@@ -23,7 +23,7 @@ public:
     void move(std::vector<std::vector<int>>& grid, int L, std::mt19937& gen);
 
     //new function to check for infected neighbors
-    bool hasInfectedNeighbor(const std::vector<std::vector<int>>& grid, int L)
+    bool hasInfectedNeighbor(const std::vector<std::vector<int>>& grid, int L);
 
     //getter functions to allow reading of the data without changing it
     int getRow() const { return r; }

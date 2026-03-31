@@ -15,8 +15,8 @@ int main() {
 
     //Infection parameters 
     const double beta = 1.0; //infection probability (1 now because whenever there is an interaction, it leads to transmission)
-    const double sigma_time = 5.0 //time for infection to kick in
-    const double gamma_time = 15.0 //time that infection lasts
+    const double sigma_time = 5.0; //time for infection to kick in
+    const double gamma_time = 15.0; //time that infection lasts
 
     //random number generation using the mersenne twister engine
     std:: random_device rd;
@@ -33,6 +33,7 @@ int main() {
     std::vector<Agent> agents;
 
     //initialisation of placement loop
+    std::cout << "Initialising agents..." << std::endl;
     for  (int i = 0; i < N; ++i) {
         int r, c;
         do {
@@ -48,8 +49,12 @@ int main() {
     }
 
     //intialising data logging into csv file
-    std::ofstream outFile("Simulation_data_d.csv") //d for discrete version
-    outFile << "Step,Susceptible,Exposed,Infected,Recovered\n" //header for csv file
+    std::ofstream outFile("Simulation_data_d.csv"); //d for discrete version
+    if (!outFile.is_open()) {
+        std::cerr << "Error: cant open csv for writing" << std::endl; //trying to fix ts bug
+        return 1;
+    }
+    outFile << "Step,Susceptible,Exposed,Infected,Recovered\n"; //header for csv file
 
     std::cout << "Starting lattice simulation..." << std::endl;
 
@@ -65,7 +70,7 @@ int main() {
             if (a.getStatus() == State::Susceptible) { //if one is susceptible
                 if (a.hasInfectedNeighbor(grid, L)) { //and their neighbor is infected
                     if (roll(gen) < beta) { //and the 'coin flip' allows for it
-                        a.setStatus(State:Exposed);
+                        a.setStatus(State::Exposed);
                         a.resetTime();
                         grid[a.getRow()][a.getCol()] = (int)State::Exposed;
                     }
@@ -93,12 +98,15 @@ int main() {
         //data tracking and logging
         int S = 0, E = 0, I = 0, R = 0;
         for (const Agent &a : agents) {
-            if (s == State::Susceptible) S++;
-            else if (s == State::Exposed) E++;
-            else if (s == State::Infected) I++;
-            else if (s == State::Recovered) R++;
+            State currentStatus = a.getStatus();
+
+            if (currentStatus == State::Susceptible) S++;
+            else if (currentStatus == State::Exposed) E++;
+            else if (currentStatus == State::Infected) I++;
+            else if (currentStatus == State::Recovered) R++;
         }
-        outFile << step << "," << S << "," << E << "," << I << "," << R << "\n";
+        outFile << step << "," << S << "," << E << "," << I << "," << R << std::endl;
+        if (step % 100 == 0) std::cout << "Step " << step << " Processed..." << std::endl;
     }
     
     outFile.close();    
