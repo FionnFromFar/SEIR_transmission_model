@@ -19,10 +19,10 @@ void Agent::move(std::vector<std::vector<int>>& grid, int L, std::mt19937& gen) 
     if (dir == 0) next_r = r + 1; //move up 
     else if (dir == 1) next_r = r - 1; //move down
     else if (dir == 2) next_c = c + 1; //move right
-    else if (dir == 3) next_c = c + 1; //move left
+    else if (dir == 3) next_c = c - 1; //move left
 
     //making sure that if an agent is at a boundry, they are not able to move further into it
-    if (next_r >= 0 && next_r < L && next_c >= 0 && next_c > L) {
+    if (next_r >= 0 && next_r < L && next_c >= 0 && next_c < L) {
         //first check for empty cells again
         if (grid[next_r][next_c] == 0) {
             grid[r][c] = 0; //clear data on current spot

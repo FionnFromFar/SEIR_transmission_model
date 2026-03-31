@@ -7,16 +7,16 @@
 
 int main() {
     //setting up the simulation constants
-    const int N = 100; //total number of people/agents
-    const int initial_infected = 15; //15 people initially infected
+    const int N = 500; //total number of people/agents
+    const int initial_infected = 10; //people initially infected
     const int L = 50; //adjusting the size of the grid to make it more dense
-    const int total_steps = 1000; //total steps
+    const int total_steps = 125; //total steps
     const double dt = 1.0; //time step altered to 1 for lattice (discrete)
 
     //Infection parameters 
     const double beta = 1.0; //infection probability (1 now because whenever there is an interaction, it leads to transmission)
     const double sigma_time = 5.0; //time for infection to kick in
-    const double gamma_time = 15.0; //time that infection lasts
+    const double gamma_time = 20.0; //time that infection lasts
 
     //random number generation using the mersenne twister engine
     std:: random_device rd;
@@ -89,7 +89,7 @@ int main() {
             }
             //recovery process
             else if (current == State::Infected && a.getTime() > gamma_time) {
-                a.setStatus(State::Infected);
+                a.setStatus(State::Recovered);
                 a.resetTime();
                 grid[a.getRow()][a.getCol()] = (int)State::Recovered;
             }
