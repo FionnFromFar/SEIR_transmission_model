@@ -37,7 +37,7 @@ int main() {
 
     //intialising simulation parameters
     const int total_steps = 1000; //number of monte carlo steps for now is 1000        
-    std::cout << "Starting simulation with " << total_steps << "steps..." << std::endl;
+    std::cout << "Starting simulation with " << total_steps << " steps..." << std::endl;
 
     //The main time loop
     for (int step = 0; step < total_steps; ++step) {
