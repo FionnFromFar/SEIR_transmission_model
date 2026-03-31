@@ -2,107 +2,107 @@
 #include <iostream>
 #include <vector>
 #include <random> //from week 20
+#include <fstream> //for output csv file
 #include "Agent.hpp" //calling in the agent header file
 
 int main() {
     //setting up the simulation constants
     const int N = 100; //total number of people/agents
-    const double L = 100.0; //size of the area
-    const double dt = 0.1; //time step
+    const int initial_infected = 15; //15 people initially infected
+    const int L = 50; //adjusting the size of the grid to make it more dense
+    const int total_steps = 1000; //total steps
+    const double dt = 1.0; //time step altered to 1 for lattice (discrete)
+
+    //Infection parameters 
+    const double beta = 1.0; //infection probability (1 now because whenever there is an interaction, it leads to transmission)
+    const double sigma_time = 5.0 //time for infection to kick in
+    const double gamma_time = 15.0 //time that infection lasts
 
     //random number generation using the mersenne twister engine
     std:: random_device rd;
     std::mt19937 gen(rd()); //generating the randomn number based on hardware
 
-    //defining uniform flaoting point distributions
-    std::uniform_real_distribution<double> dist_pos(0.0, L); //position can be between 0 to L (size of the box)
-    std::uniform_real_distribution<double> dist_vel(-5.0, 5.0); //for now velocity can be between plus and minus 5
+    //making the distribution for integers
+    std::uniform_int_distribution<int> dist_grid(0, L - 1);
+    std::uniform_real_distribution<double> roll(0.0, 1.0);
+
+    //making the empty 2D grid
+    std::vector<std::vector<int>> grid(L, std::vector<int>(L, 0));
 
     //storing informaiton about agents
     std::vector<Agent> agents;
 
-    //initialisation loop
+    //initialisation of placement loop
     for  (int i = 0; i < N; ++i) {
-        //random initial positions and velocities for each of the people
-        double x = dist_pos(gen);
-        double y = dist_pos(gen);
-        double vx = dist_vel(gen);
-        double vy = dist_vel(gen);
+        int r, c;
+        do {
+            r = dist_grid(gen);
+            c = dist_grid(gen);
+        } while (grid[r][c] != 0); //keep trying to pick position if position is already taken
 
-        //making sure that initially, everyone is susceptible (correction!)
-        State s = State::Susceptible;
-
-        //mannually adding one initial infected agent
-        if (i == 0) {
-            s =State::Infected;
-        }
+        //assigning infected state the first 'initial_infected' agents
+        State s = (i < initial_infected) ? State::Infected : State::Susceptible;
     
-        //creating a new agent with position and velocity and add it to the simulation
-        agents.push_back(Agent(x, y, vx, vy, s));
+        grid[r][c] = (int)s;
+        agents.push_back(Agent(r, c, s));
     }
 
-    //intialising simulation parameters
-    const int total_steps = 1000; //number of monte carlo steps for now is 1000        
-    std::cout << "Starting simulation with " << total_steps << " steps..." << std::endl;
+    //intialising data logging into csv file
+    std::ofstream outFile("Simulation_data_d.csv") //d for discrete version
+    outFile << "Step,Susceptible,Exposed,Infected,Recovered\n" //header for csv file
+
+    std::cout << "Starting lattice simulation..." << std::endl;
 
     //The main time loop
     for (int step = 0; step < total_steps; ++step) {
         //looping through every agent in the vector
         for (Agent &a : agents) {                 
-            //using &a reference so to be able to move the agent in the list
-            //calling the propagation step defined in the header file
-            //which updates x and y and behaves well at the boundaries
-            a.move(dt, L);
+            //movement and infection
+            a.move(grid, L, gen);
             a.updateTime(dt); //adds dt to internal clock of each agent
 
-            //adding the transmission from exposed to infected
-            if (a.getStatus() == State::Exposed && a.getTime() > 5.0) {
-                a.setStatus(State::Infected); //change to infected after 5 ticks
-                a.resetTime(); //reset time in state (because state has changed)
-                std::cout << "An agent has become Infectious!!!" << std::endl;
-            }
-
-            //adding the transmission from infected to recovered
-            if (a.getStatus() == State::Infected && a.getTime() > 15.0) {
-                a.setStatus(State::Recovered); //change to recovered after 15 ticks
-                a.resetTime();
-                std::cout << "An agent has recovered!!!" << std::endl;
-            }
-        
-        //interaction step
-        double infection_radius = 2.0; //distance required for disease to spead
-        double transmission_prob = 0.5; //50% chance of an interaction leading to transmission
-
-        for (size_t i = 0; i < agents.size(); ++i) {
-            for (size_t j = i + 1; j < agents.size(); ++j) {
-
-                //checking if transmission is possible (interaction between infected and susceptible)
-                if ((agents[i].getStatus() == State::Infected && agents[j].getStatus() == State::Susceptible) ||
-                    (agents[j].getStatus() == State::Infected && agents[i].getStatus() == State::Susceptible)) {
-
-                        //checking if distance is within range
-                        if (agents[i].distanceTo(agents[j]) < infection_radius) {
-
-                            //generate a random probability and comparing to 0.5 (flipping a coin basically)
-                            std::uniform_real_distribution<double> roll(0.0, 1.0);
-                            if (roll(gen) < transmission_prob) {
-                                //small line to check if transmission mechanism is working
-                                std::cout << "Agent " << j << " was exposed by Agent " << i << "!" << std::endl;
-                                //change state from susceptible to exposed
-                                if (agents[i].getStatus() == State::Susceptible)
-                                    agents[i].setStatus(State::Exposed);
-                                else
-                                    agents[j].setStatus(State::Exposed);
-                            }
-                        }
+            //check for infection if susceptible
+            if (a.getStatus() == State::Susceptible) { //if one is susceptible
+                if (a.hasInfectedNeighbor(grid, L)) { //and their neighbor is infected
+                    if (roll(gen) < beta) { //and the 'coin flip' allows for it
+                        a.setStatus(State:Exposed);
+                        a.resetTime();
+                        grid[a.getRow()][a.getCol()] = (int)State::Exposed;
                     }
                 }
             }
-        }        
+        }
+        //adding the transmission from susceptible to infected to recovered
+        for (Agent &a : agents) {
+            State current = a.getStatus();
+
+            //infection process
+            if (current == State::Exposed && a.getTime() > sigma_time) {
+                a.setStatus(State::Infected);
+                a.resetTime();
+                grid[a.getRow()][a.getCol()] = (int)State::Infected;
+            }
+            //recovery process
+            else if (current == State::Infected && a.getTime() > gamma_time) {
+                a.setStatus(State::Infected);
+                a.resetTime();
+                grid[a.getRow()][a.getCol()] = (int)State::Recovered;
+            }
+        }
+        
+        //data tracking and logging
+        int S = 0, E = 0, I = 0, R = 0;
+        for (const Agent &a : agents) {
+            if (s == State::Susceptible) S++;
+            else if (s == State::Exposed) E++;
+            else if (s == State::Infected) I++;
+            else if (s == State::Recovered) R++;
+        }
+        outFile << step << "," << S << "," << E << "," << I << "," << R << "\n";
     }
-
-
-    std::cout << "Initialised " << agents.size() << " agents with dt = " << dt << std::endl;
+    
+    outFile.close();    
+    std::cout << "Simulation complete, data saved to simulation_data_d.csv" << std::endl;
 
     return 0;
 }
