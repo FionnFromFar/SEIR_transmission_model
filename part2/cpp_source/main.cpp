@@ -2,6 +2,7 @@
 #include <vector>
 #include <random> //from week 20
 #include "Agent.hpp" //calling in the agent header file
+#include <fstream> //for outputting to csv
 
 int main() {
     //setting up the simulation constants
@@ -43,6 +44,9 @@ int main() {
     //intialising simulation parameters
     const int total_steps = 1000; //number of monte carlo steps for now is 1000        
     std::cout << "Starting simulation with " << total_steps << " steps..." << std::endl;
+
+    std::ofstream outFile("simulation_data.csv");
+    outFile << "Step,Susceptible,Exposed,Infected,Recovered\n"; //writing the header for the csv file
 
     //The main time loop
     for (int step = 0; step < total_steps; ++step) {
@@ -97,9 +101,20 @@ int main() {
                     }
                 }
             }
-        }        
+        }  
+
+    int S = 0, E = 0, I = 0, R = 0;
+    for (const Agent &a : agents) {
+        if (a.getStatus() == State::Susceptible) S++;               
+        else if (a.getStatus() == State::Exposed) E++;
+        else if (a.getStatus() == State::Infected) I++;
+        else if (a.getStatus() == State::Recovered) R++;
+    }
+    //outputting these values into the csv file
+    outFile << step << "," << S << "," << E << "," << I << "," << R << "\n";     
     }
 
+    outFile.close(); //closing file after ending loop
 
     std::cout << "Initialised " << agents.size() << " agents with dt = " << dt << std::endl;
 
