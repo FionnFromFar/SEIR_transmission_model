@@ -46,8 +46,10 @@ int main() {
     const int total_steps = 1000; //number of monte carlo steps for now is 1000        
     std::cout << "Starting simulation with " << total_steps << " steps..." << std::endl;
 
-    std::ofstream outFile("simulation_data.csv");
-    outFile << "Step,Susceptible,Exposed,Infected,Recovered\n"; //writing the header for the csv file
+    std::ofstream outFile("simulation_data.csv"); //for SEIR graph
+    std::ofstream posFile("positions.csv");
+    outFile << "Step,Susceptible,Exposed,Infected,Recovered\n"; //writing the header for the SEIR csv file
+    posFile << "Step,ID,x,y,status\n"; //header for position csv file
 
     //The main time loop
     for (int step = 0; step < total_steps; ++step) {
@@ -72,7 +74,7 @@ int main() {
                 a.resetTime();
                 std::cout << "An agent has recovered!!!" << std::endl;
             }
-        
+        }
         //interaction step
         double infection_radius = 2.0; //distance required for disease to spead
         double transmission_prob = 0.5; //50% chance of an interaction leading to transmission
@@ -102,7 +104,7 @@ int main() {
                     }
                 }
             }
-        }  
+      
 
     int S = 0, E = 0, I = 0, R = 0;
     for (const Agent &a : agents) {
@@ -111,11 +113,18 @@ int main() {
         else if (a.getStatus() == State::Infected) I++;
         else if (a.getStatus() == State::Recovered) R++;
     }
+    for (size_t i = 0; i < agents.size(); ++i) {
+        posFile << step << "," << i << ","
+        << agents[i].getX() << ","
+        << agents[i].getY() << ","
+        << static_cast<int>(agents[i].getStatus()) << "\n";
+    }
     //outputting these values into the csv file
     outFile << step << "," << S << "," << E << "," << I << "," << R << "\n";     
     }
 
-    outFile.close(); //closing file after ending loop
+    outFile.close(); //closing SEIR file after ending loop
+    posFile.close(); //closing the position file after ending loop
 
     std::cout << "Initialised " << agents.size() << " agents with dt = " << dt << std::endl;
 
