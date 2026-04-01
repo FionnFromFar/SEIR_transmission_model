@@ -44,6 +44,7 @@ Each spatial model contains its own 'Makefile' for ease of use.
     python3 animation_continuous.py #Launches real-time animation for continuous model
     python3 lattice_animation.py    #Launches real-time animation for discrete model
     ```
+```
 
 ---
 
