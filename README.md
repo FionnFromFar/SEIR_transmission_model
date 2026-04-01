@@ -1,4 +1,4 @@
-# SEIR SEIR Transmission Model
+# SEIR Transmission Model
 **Author:** [Fionn Doheny] | **Student ID:** 2568597
 **Version** v3.0
 
