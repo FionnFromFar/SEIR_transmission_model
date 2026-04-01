@@ -1,5 +1,5 @@
 # SEIR Transmission Model
-**Author:** [Fionn Doheny] | **Student ID:** 2568597
+**Author:** Fionn Doheny | **Student ID:** 2568597
 **Version** v3.0
 
 ## Project Overview
