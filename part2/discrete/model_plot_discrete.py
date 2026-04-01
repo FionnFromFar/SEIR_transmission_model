@@ -4,15 +4,15 @@ import os
 
 #importing the data
 #continuous_model = "continuous/brownian_results.csv"
-discrete_model = "discrete/graphs+data/lattice_results.csv"
+discrete_model = "Simulation_data_d.csv"
 
 #checking if files loaded properly
-if not os.path.exists(continuous_model) or not os.path.exists(discrete_model):
+if not os.path.exists(discrete_model): 
     print("Error: couldn't find the csv file")
     exit()
 
 #reading data using pandas
-df_cont = pd.read_csv(continuous_model)
+#df_cont = pd.read_csv(continuous_model)
 df_disc = pd.read_csv(discrete_model)
 
 #function to create plots
