@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import os
 
 #importing the data
-continuous_model = "continuous/brownian_results.csv"
-discrete_model = "discrete/lattice_results.csv"
+#continuous_model = "continuous/brownian_results.csv"
+discrete_model = "discrete/graphs+data/lattice_results.csv"
 
 #checking if files loaded properly
 if not os.path.exists(continuous_model) or not os.path.exists(discrete_model):
@@ -36,7 +36,7 @@ def save_plot(df, title, filename):
     print(f"saved: {filename}")
 
 #continous model plot
-save_plot(df_cont, "SEIR Model: Continuous (Brownian Motion)", "continuous_model.png")
+#save_plot(df_cont, "SEIR Model: Continuous (Brownian Motion)", "continuous_model.png")
 
 #discrete model plot
 save_plot(df_disc, "SEIR Model: Discrete (Lattice Grid)", "discrete_model.png")
