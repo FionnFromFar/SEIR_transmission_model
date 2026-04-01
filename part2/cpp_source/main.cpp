@@ -58,6 +58,9 @@ int main() {
 
     std::cout << "Starting lattice simulation..." << std::endl;
 
+    //writing up python binding for animation of each step
+    std::ofstream animFile("grid_animation_data.csv");
+
     //The main time loop
     for (int step = 0; step < total_steps; ++step) {
         //looping through every agent in the vector
@@ -106,6 +109,18 @@ int main() {
             else if (currentStatus == State::Recovered) R++;
         }
         outFile << step << "," << S << "," << E << "," << I << "," << R << std::endl;
+
+        //loop to save 'snapshot' of the lattice after each step 
+        for (int r = 0; r < L; ++r) {
+            for (int c = 0; c < L; c++) {
+                animFile << grid[r][c];
+                
+                if (!(r == L - 1 && c == L - 1)) {
+                    animFile << ",";
+                }
+            }
+        }
+        animFile << "\n";
         if (step % 100 == 0) std::cout << "Step " << step << " Processed..." << std::endl;
     }
     
