@@ -8,8 +8,14 @@ __pycache--/
 *.o
 #Ignoring executable files
 *.exe
+#Ignoring the specific simulation file (*.o didnt seem to work)
+simulation
+#Ignoring simulation file in specific directory
+part2/cpp_source/simulation
 #Ignoring windows debug files
 *.pdb
+#Ignoring the simulation data file
+part2/cpp_source/simulation_data.csv
 
 # -- System Ignores
 #Ignore mac hidden files
