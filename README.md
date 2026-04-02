@@ -9,7 +9,7 @@ This repository contains a comparative study of the SEIR (Susceptible, Exposed, 
 ## Repository Structure
 This project is structured into three distinct experimental environments:
 
-* **'part1/'**: **Deterministic ODE's** 
+* **part1/**: **Deterministic ODE's** 
 * **part2/continuous/'**: **Brownian Motion Model**
 * **part2/discrete/'**: **Lattice-Grid Model** 
 
