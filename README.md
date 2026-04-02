@@ -1,19 +1,39 @@
 # SEIR Transmission Model
-**Author:** Fionn Doheny | **Student ID:** 2568597
-**Version** v3.0
+**Author:** Fionn Doheny | **Student ID:** 2568597 | **Version** v3.0
 
 ## Project Overview
-This repository contains a comparative study of the SEOR (Susceptible, Exposed, Infected, Recovered) epidemic model. The project compares traditional mathematical models with spatial Agent-based models to analyse how movement patterns affect outbreak dynamics.
+This repository contains a comparative study of the SEIR (Susceptible, Exposed, Infected, Recovered) epidemic model. The project compares traditional mathematical models with spatial Agent-based models to analyse how movement patterns affect outbreak dynamics.
 
 ---
 
 ## Repository Structure
 This project is structured into three distinct experimental environments:
 
-* **'part1/'**: **Deterministic ODE's** Python implementation using 'odeint' to establish mathematical baseline for the infection curve.
-* **part2/continuous/'**: **Brownian Motion Model** C++ engine simulation agents assigned random position and velocity within a 2D space. Infection is determined by proximety between agents (collision based). Includes Python binding for animation.
-* **part2/discrete/'**: **Lattice-Grid Model** C++ engine simulating agents on a $L \times L$ grid. Movement of agents is determined by checking for empty adjascent spaces on the grid. Infection spreads via neighborhood sensing. Includes Python a heatmap animation.
+* **'part1/'**: **Deterministic ODE's** 
+* **part2/continuous/'**: **Brownian Motion Model**
+* **part2/discrete/'**: **Lattice-Grid Model** 
 
+---
+
+## How the Simulation works
+
+### ODE Model (part1/)
+- Solves the SEIR differential equations using `odeint` function
+- Produces smooth time evolution curves for S, E, I, and R populations
+
+### Continuous Model (part2/continuous/)
+Each timestep:
+1. Agents move according to their assigned velocity (Brownian motion)
+2. Distances between agents are calculated
+3. If agents are within a transmission radius, infection may occur probabilistically
+4. State transitions (E → I → R) occur stochastically
+
+### Discrete Model (part2/discrete/)
+Each Monte Carlo step:
+1. Agents attempt to move to a random neighbouring lattice site
+2. Movement only occurs if the target site is empty
+3. Susceptible agents check neighbouring cells for infected agents
+4. State transitions occur probabilistically
 ---
 
 ## Execution Instructions
@@ -31,7 +51,7 @@ Each spatial model contains its own 'Makefile' for ease of use.
 ```
 2.  **Build the C++ simulation:**
 ```bash
-    make
+    make # compiles all files
     make clean # removes the executable and object files (use for re-running simulation after changing paramters)
 ```
 3.  **Run the engine:**
@@ -48,6 +68,16 @@ Each spatial model contains its own 'Makefile' for ease of use.
 
 ---
 
+## Customisation:
+Simulation parameters such as:
+
+- Number of agents (N)
+- Simulation duration
+- Transmission probability
+- Movement parameters
+
+can be modified directly in the source files before compilation.
+
 ## Key research features
 * **Dynamic visualisations:** Real-time python bindings track the spatial evolution of "Infected" population.
 * **Modular Design:** Seperate, organised source code and directories for high reporducability. 
@@ -59,4 +89,4 @@ Each spatial model contains its own 'Makefile' for ease of use.
 * **v1.0-ode**: Python only ODE simulation (purely mathematical)
 * **v1.0 - v1.3**: Continuous Brownian motion logic simulation developments
 * **v2.0 - v2.2**: Lattice model implementation and bug fixes, finalising with addition of animation
-* **v3.0**: **Final Release.** Consolidated directory structure and integrated animations for both models.
+* **v3.0**: **Final Release.** Consolidated directory structure and integrated animations for both models. This is the version within the main branch
