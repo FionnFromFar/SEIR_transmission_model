@@ -28,22 +28,22 @@ Each spatial model contains its own 'Makefile' for ease of use.
 1. **Navigate to a model directory:**
 ```bash
     cd part2/continuous  # or cd part2/discrete
-    ```
+```
 2.  **Build the C++ simulation:**
-    ```bash
+```bash
     make
-    ```
+    make clean # removes the executable and object files (use for re-running simulation after changing paramters)
+```
 3.  **Run the engine:**
-    ```bash
+```bash
     ./simulation
-    ```
+```
 4.  **Visualize Data & Animation:**
-    ```bash
+```bash
     python3 plot_continuous.py      #Generates SEIR graph for continuous model
     python3 model_plot_discrete.py  #Generates SEIR graph for discrete model
     python3 animation_continuous.py #Launches real-time animation for continuous model
     python3 lattice_animation.py    #Launches real-time animation for discrete model
-    ```
 ```
 
 ---
