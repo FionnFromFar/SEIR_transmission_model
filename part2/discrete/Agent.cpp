@@ -53,3 +53,14 @@ bool Agent::hasInfectedNeighbor(const std::vector<std::vector<int>>& grid, int L
     }
     return false;
 }
+
+//adding the reinfection function: gives agents a small chance of becoming susceptible again after recovering
+bool Agent::checkReinfection(double rho, std::mt19937& gen) {
+    std::uniform_real_distribution<double> roll(0.0, 1.0); //random number between 0 and 1
+    if (status == State::Recovered && roll(gen) < rho) { //if the agent is recovered AND the roll is less than rho
+        status = State::Susceptible; //agent becomes susceptible again
+        resetTime(); //resets agents internal clock
+        return true; //tells main.cpp that re-infection has occured so grid can be updated
+    }
+    return false; //no re-infection has occured
+}

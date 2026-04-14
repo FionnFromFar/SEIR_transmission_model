@@ -33,6 +33,9 @@ public:
     //setter function whcih changes an agents health status if need be (ie becoming infected from susceptible when in contacted with an infected agent)
     void setStatus(State s) { status = s; }
 
+    //function to check if a recovered agent becomes susceptible again (re-infection)
+    bool checkReinfection(double rho, std::mt19937& gen);
+
     //timer functions remain the same
     void updateTime(double dt) {timeInState += dt; }
     void resetTime() {timeInState = 0.0; }

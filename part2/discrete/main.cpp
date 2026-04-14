@@ -12,6 +12,7 @@ int main() {
     const int L = 50; //adjusting the size of the grid to make it more dense
     const int total_steps = 125; //total steps
     const double dt = 1.0; //time step altered to 1 for lattice (discrete)
+    const double rho = 0.00; //re-infection probability per step (very small)
 
     //Infection parameters 
     const double beta = 1.0; //infection probability (1 now because whenever there is an interaction, it leads to transmission)
@@ -95,6 +96,12 @@ int main() {
                 a.setStatus(State::Recovered);
                 a.resetTime();
                 grid[a.getRow()][a.getCol()] = (int)State::Recovered;
+            }
+            //re-infection process
+            else if (current == State::Recovered) {
+                if (a.checkReinfection(rho, gen)) {
+                    grid[a.getRow()][a.getCol()] = (int)State::Susceptible; //update the grid to show new susceptible
+                }
             }
         }
         
