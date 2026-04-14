@@ -1,5 +1,5 @@
 # SEIR Transmission Model
-**Author:** Fionn Doheny | **Student ID:** 2568597 | **Version** v3.0
+**Author:** Fionn Doheny | **Student ID:** 2568597 | **Version** v4.1
 
 ## Project Overview
 This repository contains a comparative study of the SEIR (Susceptible, Exposed, Infected, Recovered) epidemic model. The project compares traditional mathematical models with spatial Agent-based models to analyse how movement patterns affect outbreak dynamics.
