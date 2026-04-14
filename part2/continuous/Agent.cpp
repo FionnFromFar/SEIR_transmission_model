@@ -29,7 +29,7 @@ void Agent::move(double dt, double L) {
 
         //making sure the agent cant get stuck outside the box (vertical)
         if (y < 0) y = 0;
-        if (y > 0) y = L;
+        if (y > L) y = L; //little bug fix making sure the agent cant get stuck outside the box
     }
 }
 
@@ -38,4 +38,15 @@ double Agent::distanceTo(const Agent& other) const {
     double dx = x - other.x; //dx is difference in x cords
     double dy = y - other.y; //dy is difference in y cords
     return std::sqrt(dx*dx + dy*dy);
+}
+
+//re-infection function: gives recovered agents a small change of becoming susceptible again
+bool Agent::checkReinfection(double rho, std::mt19937& gen) {
+    std::uniform_real_distribution<double> roll(0.0, 1.0); //random number between 0 and 1
+    if (status == State::Recovered && roll(gen) < rho) { //if agent is recovered AND the roll value is less than rho
+        status = State::Susceptible; //agent becomes susceptible again
+        resetTime(); //resets the agents internal clock
+        return true; //tells main.cpp that re-infection has occured
+    }
+    return false; //no reinfection occurred
 }

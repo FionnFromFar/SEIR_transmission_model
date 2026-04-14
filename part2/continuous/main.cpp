@@ -10,6 +10,7 @@ int main() {
     const int N = 100; //total number of people/agents
     const double L = 100.0; //size of the area
     const double dt = 0.1; //time step
+    const double rho = 0.01; //1% chance of becoming susceptible again
 
     //random number generation using the mersenne twister engine
     std:: random_device rd;
@@ -73,6 +74,13 @@ int main() {
                 a.setStatus(State::Recovered); //change to recovered after 15 ticks
                 a.resetTime();
                 std::cout << "An agent has recovered!!!" << std::endl;
+            }
+
+            //adding the re-infection process
+            if (a.getStatus() == State::Recovered) {
+                if (a.checkReinfection(rho, gen)) {
+                    std::cout << "An agent has been re-infected" << std::endl; //confirmation of re-infection (keeping it consistent)
+                }
             }
         }
         //interaction step

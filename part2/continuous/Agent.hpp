@@ -1,6 +1,7 @@
 //CONTINUOUS BRANCH
 #ifndef AGENT_HPP //header guard to prevent being called twice
 #define AGENT_HPP
+#include <random>
 
 // defining the SEIR states
 enum class State { Susceptible, Exposed, Infected, Recovered }; //using enum class to prevent leaking into global scope
@@ -36,6 +37,9 @@ public:
     //getting the state so that it can be changed if neccecary after infected/susceptible interatction
     State getState() const {return status; }
     void setState(State newState) { status = newState; }
+
+    //function to check if a recovered agent becomes susceptible again (re-infection)
+    bool checkReinfection(double rho, std::mt19937& gen);
 
     void updateTime(double dt) {timeInState += dt; }
     void resetTime() {timeInState = 0.0; }
