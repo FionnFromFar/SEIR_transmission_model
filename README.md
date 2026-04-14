@@ -89,4 +89,5 @@ can be modified directly in the source files before compilation.
 * **v1.0-ode**: Python only ODE simulation (purely mathematical)
 * **v1.0 - v1.3**: Continuous Brownian motion logic simulation developments
 * **v2.0 - v2.2**: Lattice model implementation and bug fixes, finalising with addition of animation
-* **v3.0**: **Final Release.** Consolidated directory structure and integrated animations for both models. This is the version within the main branch
+* **v3.0**: Consolidated directory structure and integrated animations for both models. 
+* **v4.1**: **Final Release.**: This is the version within the main branch. Contains re-infection aspect in both models where recovered agents face a probability of becoming susceptible again.
